@@ -1,0 +1,29 @@
+Install and check kafka and zookeeper.
+
+1. Install zookeeper:
+$ sudo docker run -dit --name zookeeper --net host -v /var/run/docker.sock:/var/run/docker.sock -e ZOO_USER=zookeeper -e ZOO_CONF_DIR=/conf -e ZOO_DATA_DIR=/data -e ZOO_DATA_LOG_DIR=/datalog -e ZOO_PORT=2181 -e ZOO_TICK_TIME=2000 -e ZOO_INIT_LIMIT=5 -e ZOO_SYNC_LIMIT=2 -e ZOOCFGDIR=/conf zookeeper:latest
+
+2. Install kafka:
+$ sudo docker run -dit --name kafka-1 -p 9092:9092 -v /home/user/kafka-1-dir/config:/kafka_2.11-0.11.0.3/config -v /home/user/kafka-1-dir/kafka-logs/:/tmp/kafka-logs/ -e BROKER_ID=1 -e KAFKA_ADVERTISED_HOST_NAME=<host_ip> -e KAFKA_ZOOKEEPER_CONNECT="<host_ip>:2181" wurstmeister/kafka:2.11-0.11.0.3
+
+3. Enter in a container "kafka-1":
+$ sudo docker exec -it kafka-1 /bin/bash
+
+4. Create topic and run kafka-producer from the inside container "kafka-1":
+# /opt/kafka_2.11-0.11.0.3/bin/kafka-topics.sh --create --zookeeper 192.168.0.12:2181 --replication-factor 1 --partitions 1 --topic test
+
+# /opt/kafka_2.11-0.11.0.3/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test
+
+5. Enter in a container "kafka-1" from second terminal:
+$ sudo docker exec -it kafka-1 /bin/bash
+
+6. Run kafka-consumer from the inside container "kafka-1":
+/opt/kafka_2.11-0.11.0.3/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
+
+7. From first terminal (kafka-producer) type any message:
+> Hello!
+
+8. See this message from second terminal (kafka-consumer):
+Hello!
+
+

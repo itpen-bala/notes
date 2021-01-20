@@ -1,3 +1,0 @@
-sudo docker run -dit --name zookeeper --net host -v /var/run/docker.sock:/var/run/docker.sock -e ZOO_USER=zookeeper -e ZOO_CONF_DIR=/conf -e ZOO_DATA_DIR=/data -e ZOO_DATA_LOG_DIR=/datalog -e ZOO_PORT=2181 -e ZOO_TICK_TIME=2000 -e ZOO_INIT_LIMIT=5 -e ZOO_SYNC_LIMIT=2 -e ZOOCFGDIR=/conf zookeeper:latest
-
-sudo docker run -dit --name kafka-1 -p 9092:9092 -v /home/user/kafka-1-dir/config:/kafka_2.11-0.11.0.3/config -v /home/user/kafka-1-dir/kafka-logs/:/tmp/kafka-logs/ -e BROKER_ID=1 -e KAFKA_ADVERTISED_HOST_NAME=<host_ip> -e KAFKA_ZOOKEEPER_CONNECT="<host_ip>:2181" wurstmeister/kafka:2.11-0.11.0.3
